@@ -3,19 +3,22 @@ package application.usecase;
 import domain.model.Student;
 import domain.port.input.StudentUseCase;
 import domain.port.output.StudentRepository;
-import shared.datastructure.BinarySearchTree;
+import shared.datastructure.AVLTree;
 
 import java.util.List;
 
 public class StudentUseCaseImpl implements StudentUseCase {
 
     private final StudentRepository studentRepository;
-    private final BinarySearchTree<Student> studentTree;
+    private final AVLTree<Student> studentTree;
 
     public StudentUseCaseImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
-        this.studentTree = new BinarySearchTree<>(Student::getCode);
-        // Cargar datos existentes en el arbol
+        this.studentTree = new AVLTree<>(Student::getCode);
+        // Cargar datos existentes en el arbol. Los codigos se generan e insertan
+        // en orden correlativo ascendente (ver StudentRepositoryImpl.generateNextCode
+        // y findAll ORDER BY code); un BST simple degeneraria en una lista enlazada
+        // con este patron de carga, por lo que se usa AVL para garantizar O(log n).
         studentRepository.findAll().forEach(studentTree::insert);
     }
 
@@ -31,7 +34,7 @@ public class StudentUseCaseImpl implements StudentUseCase {
 
     @Override
     public Student findByCode(String code) {
-        // Busqueda eficiente usando el BST en memoria
+        // Busqueda eficiente usando el AVL en memoria (O(log n) garantizado)
         Student found = studentTree.search(code);
         if (found != null)
             return found;
@@ -46,7 +49,7 @@ public class StudentUseCaseImpl implements StudentUseCase {
 
     @Override
     public List<Student> findAll() {
-        // Recorrido inorden del BST (ordenado por codigo)
+        // Recorrido inorden del AVL (ordenado por codigo)
         List<Student> fromTree = studentTree.inOrder();
         if (!fromTree.isEmpty())
             return fromTree;

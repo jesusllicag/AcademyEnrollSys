@@ -7,7 +7,9 @@ import domain.port.output.ClassroomRepository;
 import domain.port.output.CourseRepository;
 import domain.port.output.EnrollmentRepository;
 import domain.port.output.ProfessorRepository;
+import shared.algorithm.SearchAlgorithms;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseUseCaseImpl implements CourseUseCase {
@@ -17,6 +19,10 @@ public class CourseUseCaseImpl implements CourseUseCase {
     private final EnrollmentRepository enrollmentRepository;
     private final ProfessorRepository professorRepository;
 
+    // Cache en memoria ordenada por codigo (la consulta SQL ya trae ORDER BY
+    // code), usada para resolver findByCode con busqueda binaria por clave.
+    private List<Course> courseCache;
+
     public CourseUseCaseImpl(CourseRepository courseRepository,
             ClassroomRepository classroomRepository,
             EnrollmentRepository enrollmentRepository,
@@ -25,6 +31,7 @@ public class CourseUseCaseImpl implements CourseUseCase {
         this.classroomRepository = classroomRepository;
         this.enrollmentRepository = enrollmentRepository;
         this.professorRepository = professorRepository;
+        this.courseCache = new ArrayList<>(courseRepository.findAll());
     }
 
     @Override
@@ -35,12 +42,23 @@ public class CourseUseCaseImpl implements CourseUseCase {
             baseCode = baseCode.substring(0, 6);
         String code = baseCode + String.format("%03d", System.currentTimeMillis() % 1000);
         Course course = new Course(code, name, maxStudents, false);
-        return courseRepository.save(course);
+        Course saved = courseRepository.save(course);
+        refreshCache();
+        return saved;
     }
 
     @Override
     public Course findByCode(String code) {
+        // Busqueda binaria por clave sobre la cache ordenada por codigo (O(log n))
+        Course found = SearchAlgorithms.binarySearchByKey(courseCache, code, Course::getCode);
+        if (found != null)
+            return found;
+        // Fallback a BD por si la cache quedo desactualizada
         return courseRepository.findByCode(code).orElse(null);
+    }
+
+    private void refreshCache() {
+        courseCache = new ArrayList<>(courseRepository.findAll());
     }
 
     @Override
@@ -55,7 +73,10 @@ public class CourseUseCaseImpl implements CourseUseCase {
 
     @Override
     public boolean deleteCourse(String code) {
-        return courseRepository.delete(code);
+        boolean deleted = courseRepository.delete(code);
+        if (deleted)
+            refreshCache();
+        return deleted;
     }
 
     @Override

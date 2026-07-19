@@ -204,6 +204,7 @@ public class AdminConsole {
             ConsoleHelper.printInfo("3. Listar todos los cursos");
             ConsoleHelper.printInfo("4. Ver aulas de un curso");
             ConsoleHelper.printInfo("5. Eliminar curso");
+            ConsoleHelper.printInfo("6. Buscar curso por codigo");
             ConsoleHelper.printInfo("0. Volver");
 
             int opt = ConsoleHelper.readInt("  Opcion: ");
@@ -213,10 +214,23 @@ public class AdminConsole {
                 case 3 -> listarCursos();
                 case 4 -> verAulasCurso();
                 case 5 -> eliminarCurso();
+                case 6 -> buscarCurso();
                 case 0 -> running = false;
                 default -> ConsoleHelper.printError("Opcion invalida.");
             }
         }
+    }
+
+    private void buscarCurso() {
+        ConsoleHelper.printTitle("BUSCAR CURSO");
+        String codigo = ConsoleHelper.readLine("  Codigo del curso: ");
+        Course course = courseUseCase.findByCode(codigo);
+        if (course == null) {
+            ConsoleHelper.printError("Curso no encontrado.");
+        } else {
+            ConsoleHelper.printInfo(course.toString());
+        }
+        ConsoleHelper.pause();
     }
 
     private void crearCurso() {
