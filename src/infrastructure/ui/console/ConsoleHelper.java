@@ -51,7 +51,7 @@ public class ConsoleHelper {
         System.out.println();
         printSeparator();
         System.out.println("  " + title);
-        printSeparator();
+//        printSeparator();
     }
 
     public static void printSuccess(String msg) {

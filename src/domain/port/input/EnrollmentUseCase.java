@@ -9,6 +9,8 @@ public interface EnrollmentUseCase {
 
     boolean leaveQueue(String studentCode);
 
+    boolean clearQueue();
+
     List<EnrollmentQueueEntry> getQueue();
 
     EnrollmentQueueEntry getQueueEntry(String studentCode);

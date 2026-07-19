@@ -54,6 +54,11 @@ public class EnrollmentUseCaseImpl implements EnrollmentUseCase {
     }
 
     @Override
+    public boolean clearQueue() {
+        return queueRepository.clearAll();
+    }
+
+    @Override
     public List<EnrollmentQueueEntry> getQueue() {
         return queueRepository.findAll();
     }

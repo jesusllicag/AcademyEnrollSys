@@ -324,12 +324,7 @@ public class AdminConsole {
                     }
                     ConsoleHelper.pause();
                 }
-                case 3 -> {
-                    adminUseCase.closeAllEnrollments();
-                    enrollmentUseCase.closeEnrollment();
-                    ConsoleHelper.printSuccess("Todas las matriculas cerradas.");
-                    ConsoleHelper.pause();
-                }
+                case 3 -> cerrarTodasLasMatriculas();
                 case 4 -> aperturarCursoEspecifico();
                 case 5 -> cerrarCursoEspecifico();
                 case 6 -> verCola();
@@ -338,6 +333,21 @@ public class AdminConsole {
                 default -> ConsoleHelper.printError("Opcion invalida.");
             }
         }
+    }
+
+    private void cerrarTodasLasMatriculas() {
+        adminUseCase.closeAllEnrollments();
+        enrollmentUseCase.closeEnrollment();
+        ConsoleHelper.printSuccess("Todas las matriculas cerradas.");
+
+        String resp = ConsoleHelper.readLine("  ¿Eliminar la cola de matricula actual? (S/N): ");
+        if (resp.equalsIgnoreCase("S")) {
+            enrollmentUseCase.clearQueue();
+            ConsoleHelper.printSuccess("Cola de matricula eliminada.");
+        } else {
+            ConsoleHelper.printInfo("Cola de matricula preservada para el siguiente periodo.");
+        }
+        ConsoleHelper.pause();
     }
 
     private void configurarPeriodo() {

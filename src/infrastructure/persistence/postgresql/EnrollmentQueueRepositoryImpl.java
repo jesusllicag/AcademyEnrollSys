@@ -119,6 +119,17 @@ public class EnrollmentQueueRepositoryImpl implements EnrollmentQueueRepository 
         }
     }
 
+    @Override
+    public boolean clearAll() {
+        String sql = "DELETE FROM enrollment_queue";
+        try (Statement st = db.getConnection().createStatement()) {
+            st.executeUpdate(sql);
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al vaciar la cola: " + e.getMessage(), e);
+        }
+    }
+
     private EnrollmentQueueEntry mapRow(ResultSet rs) throws SQLException {
         return new EnrollmentQueueEntry(
                 rs.getString("student_code"),

@@ -18,4 +18,6 @@ public interface EnrollmentQueueRepository {
     boolean existsByStudent(String studentCode);
 
     int getMaxPosition();
+
+    boolean clearAll();
 }
