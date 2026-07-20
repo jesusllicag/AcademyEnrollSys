@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
+ * @author Jesus Llica
  * Arbol Binario de Busqueda generico.
- * Utilizado para almacenar y buscar alumnos por codigo.
+ * Utilizado para almacenar y buscar alumnos por codigo
  */
 public class BinarySearchTree<T> {
 

@@ -19,8 +19,8 @@ public class CourseUseCaseImpl implements CourseUseCase {
     private final EnrollmentRepository enrollmentRepository;
     private final ProfessorRepository professorRepository;
 
-    // Cache en memoria ordenada por codigo (la consulta SQL ya trae ORDER BY
-    // code), usada para resolver findByCode con busqueda binaria por clave.
+    // Cache en memoria ordenada por codigo (la consulta SQL ya trae ORDER BY code),
+    // usada para resolver findByCode con busqueda binaria por clave.
     private List<Course> courseCache;
 
     public CourseUseCaseImpl(CourseRepository courseRepository,
@@ -49,7 +49,7 @@ public class CourseUseCaseImpl implements CourseUseCase {
 
     @Override
     public Course findByCode(String code) {
-        // Busqueda binaria por clave sobre la cache ordenada por codigo (O(log n))
+        // Busqueda binaria por clave sobre la cache ordenada por codigo
         Course found = SearchAlgorithms.binarySearchByKey(courseCache, code, Course::getCode);
         if (found != null)
             return found;

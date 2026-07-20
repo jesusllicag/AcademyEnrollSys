@@ -4,19 +4,13 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Algoritmos de busqueda implementados desde cero.
+ * @author Jesus Llica
+ * Algoritmos de busqueda
  */
 public class SearchAlgorithms {
 
     private SearchAlgorithms() {
-    }
 
-    public static <T> T sequentialSearch(List<T> list, java.util.function.Predicate<T> predicate) {
-        for (T item : list) {
-            if (predicate.test(item))
-                return item;
-        }
-        return null;
     }
 
     /**

@@ -21,7 +21,7 @@ public class Main {
             return;
         }
 
-        // -- infrastructure --
+        // -- Capa: infrastructure --
         StudentRepository studentRepo = new StudentRepositoryImpl(db);
         ProfessorRepository professorRepo = new ProfessorRepositoryImpl(db);
         CourseRepository courseRepo = new CourseRepositoryImpl(db);
@@ -30,17 +30,15 @@ public class Main {
         EnrollmentQueueRepository queueRepo = new EnrollmentQueueRepositoryImpl(db);
         EnrollmentPeriodRepository periodRepo = new EnrollmentPeriodRepositoryImpl(db);
 
-        // -- application --
+        // -- Capa: application --
         StudentUseCase studentUseCase = new StudentUseCaseImpl(studentRepo);
         ProfessorUseCase professorUseCase = new ProfessorUseCaseImpl(professorRepo);
         CourseUseCase courseUseCase = new CourseUseCaseImpl(courseRepo, classroomRepo, enrollmentRepo, professorRepo);
-        EnrollmentUseCase enrollmentUseCase = new EnrollmentUseCaseImpl(
-                queueRepo, enrollmentRepo, periodRepo, courseRepo, studentRepo);
+        EnrollmentUseCase enrollmentUseCase = new EnrollmentUseCaseImpl(queueRepo, enrollmentRepo, periodRepo, courseRepo, studentRepo);
         AdminUseCase adminUseCase = new AdminUseCaseImpl(periodRepo, courseRepo, enrollmentRepo);
 
         // -- UI: console --
-        MainConsole console = new MainConsole(
-                studentUseCase, professorUseCase, courseUseCase, enrollmentUseCase, adminUseCase);
+        MainConsole console = new MainConsole(studentUseCase, professorUseCase, courseUseCase, enrollmentUseCase, adminUseCase);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {

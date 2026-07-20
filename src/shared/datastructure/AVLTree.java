@@ -67,7 +67,7 @@ public class AVLTree<T> {
 
     public boolean delete(String key) {
         int[] deleted = { 0 };
-        root = deleteRec(root, key, deleted);
+        root = deleteRec(root, key, deleted);//35
         return deleted[0] == 1;
     }
 

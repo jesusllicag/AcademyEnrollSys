@@ -15,8 +15,8 @@ public class ProfessorUseCaseImpl implements ProfessorUseCase {
 
     private final ProfessorRepository professorRepository;
 
-    // Cache en memoria ordenada por codigo (la consulta SQL ya trae ORDER BY
-    // code), usada para resolver findByCode con busqueda binaria clasica.
+    // Cache en memoria ordenada por codigo (la consulta SQL ya trae ORDER BY code),
+    // usada para resolver findByCode con busqueda binaria clasica.
     private List<Professor> professorCache;
 
     public ProfessorUseCaseImpl(ProfessorRepository professorRepository) {
